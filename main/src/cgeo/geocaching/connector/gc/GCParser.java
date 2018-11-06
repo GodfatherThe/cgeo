@@ -193,8 +193,8 @@ public final class GCParser {
             // cache distance - estimated distance for basic members
             final String distance = TextUtils.getMatch(row, GCConstants.PATTERN_SEARCH_DIRECTION_DISTANCE, false, 2, null, false);
             if (distance != null) {
-                cache.setDistance(DistanceParser.parseDistance(distance,
-                        !Settings.useImperialUnits()));
+                final DistanceParser.DistanceUnit defaultUnit = Settings.useImperialUnits() ? DistanceParser.DistanceUnit.FT : DistanceParser.DistanceUnit.M;
+                cache.setDistance(DistanceParser.parseDistance(distance, defaultUnit));
             }
 
             // difficulty/terrain
@@ -1437,8 +1437,8 @@ public final class GCParser {
         final String distance = TextUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_DISTANCE, false, null);
         if (distance != null) {
             try {
-                trackable.setDistance(DistanceParser.parseDistance(distance,
-                        !Settings.useImperialUnits()));
+                final DistanceParser.DistanceUnit defaultUnit = Settings.useImperialUnits() ? DistanceParser.DistanceUnit.FT : DistanceParser.DistanceUnit.M;
+                trackable.setDistance(DistanceParser.parseDistance(distance, defaultUnit));
             } catch (final NumberFormatException e) {
                 Log.e("GCParser.parseTrackable: Failed to parse distance", e);
             }

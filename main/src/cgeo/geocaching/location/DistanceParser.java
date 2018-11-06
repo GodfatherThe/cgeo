@@ -20,12 +20,11 @@ public final class DistanceParser {
      * (such as "1.2km").
      *
      * @param distanceText the string to analyze
-     * @param metricUnit   if false AND no unit is present in the string, the units will be considered
-     *                     to be FT, meters otherwise
+     * @param defaultUnit  unit to use if string contains no unit
      * @return the distance in kilometers
      * @throws NumberFormatException if the given number is invalid
      */
-    public static float parseDistance(final String distanceText, final boolean metricUnit)
+    public static float parseDistance(final String distanceText, final DistanceUnit defaultUnit)
             throws NumberFormatException {
         final MatcherWrapper matcher = new MatcherWrapper(pattern, distanceText);
 
@@ -36,7 +35,7 @@ public final class DistanceParser {
         final float value = Float.parseFloat(matcher.group(1).replace(',', '.'));
         final String unitStr = StringUtils.lowerCase(matcher.group(2), Locale.US);
 
-        DistanceUnit unit = metricUnit ? DistanceUnit.M : DistanceUnit.FT;
+        DistanceUnit unit = defaultUnit;
 
         switch (unitStr) {
             case "m":
@@ -55,43 +54,19 @@ public final class DistanceParser {
                 unit = DistanceUnit.FT;
                 break;
         }
-        return convertDistance(value, unit);
-    }
 
-
-    /**
-     * Parses a distance string {@code distanceText} representing distance in units {@code unit}
-     *
-     * @param distanceText distance string
-     * @param unit         unit to convert from
-     * @return the distance in kilometers
-     * @throws NumberFormatException if the given string is not numeric
-     */
-    public static float parseDistance(final String distanceText, final DistanceUnit unit)
-            throws NumberFormatException {
-        return convertDistance(Float.parseFloat(distanceText), unit);
-    }
-
-    /**
-     * Converts distance from different units to kilometers
-     *
-     * @param distance source distance to convert
-     * @param unit     unit to convert from
-     * @return the distance in kilometers
-     */
-    public static float convertDistance(final float distance, final DistanceUnit unit) {
         switch (unit) {
             case M:
-                return distance / 1000;
+                return value / 1000;
             case FT:
-                return distance * IConversion.FEET_TO_KILOMETER;
+                return value * IConversion.FEET_TO_KILOMETER;
             case MI:
-                return distance * IConversion.MILES_TO_KILOMETER;
+                return value * IConversion.MILES_TO_KILOMETER;
             case YD:
-                return distance * IConversion.YARDS_TO_KILOMETER;
+                return value * IConversion.YARDS_TO_KILOMETER;
             case KM:
             default:
-                return distance;
+                return value;
         }
     }
 

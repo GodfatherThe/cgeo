@@ -11,47 +11,27 @@ public class DistanceParserTest {
 
     @Test
     public void testFormats() {
-        assertThat((double) DistanceParser.parseDistance("1200 m", true)).isEqualTo(1.2, offset(MM));
-        assertThat((double) DistanceParser.parseDistance("1.2 km", true)).isEqualTo(1.2, offset(MM));
-        assertThat((double) DistanceParser.parseDistance("1200 ft", true)).isEqualTo(0.36576, offset(MM));
-        assertThat((double) DistanceParser.parseDistance("1200 yd", true)).isEqualTo(1.09728, offset(MM));
-        assertThat((double) DistanceParser.parseDistance("1.2 mi", true)).isEqualTo(1.9312128, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1200 m", DistanceParser.DistanceUnit.M)).isEqualTo(1.2, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1.2 km", DistanceParser.DistanceUnit.M)).isEqualTo(1.2, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1200 ft", DistanceParser.DistanceUnit.M)).isEqualTo(0.36576, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1200 yd", DistanceParser.DistanceUnit.M)).isEqualTo(1.09728, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1.2 mi", DistanceParser.DistanceUnit.M)).isEqualTo(1.9312128, offset(MM));
     }
 
     @Test
     public void testImplicit() {
-        assertThat((double) DistanceParser.parseDistance("1200", true)).isEqualTo(1.2, offset(MM));
-        assertThat((double) DistanceParser.parseDistance("1200", false)).isEqualTo(0.36576, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1200", DistanceParser.DistanceUnit.M)).isEqualTo(1.2, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1200", DistanceParser.DistanceUnit.FT)).isEqualTo(0.36576, offset(MM));
     }
 
     @Test
     public void testComma() {
-        assertThat((double) DistanceParser.parseDistance("1,2km", true)).isEqualTo(1.2, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1,2km", DistanceParser.DistanceUnit.M)).isEqualTo(1.2, offset(MM));
     }
 
     @Test
     public void testFeet() {
-        assertThat((double) DistanceParser.parseDistance("1200 FT", false)).isEqualTo(0.36576, offset(MM));
-    }
-
-    @Test
-    public void testWithUnitKm() {
-        assertThat((double) DistanceParser.convertDistance(1.2f, DistanceParser.DistanceUnit.KM)).isEqualTo(1.2, offset(MM));
-    }
-
-    @Test
-    public void testWithUnitM() {
-        assertThat((double) DistanceParser.convertDistance(1200, DistanceParser.DistanceUnit.M)).isEqualTo(1.2, offset(MM));
-    }
-
-    @Test
-    public void testWithUnitFt() {
-        assertThat((double) DistanceParser.convertDistance(1200, DistanceParser.DistanceUnit.FT)).isEqualTo(0.36576, offset(MM));
-    }
-
-    @Test
-    public void testWithUnitMi() {
-        assertThat((double) DistanceParser.convertDistance(1.2f, DistanceParser.DistanceUnit.MI)).isEqualTo(1.9312128, offset(MM));
+        assertThat((double) DistanceParser.parseDistance("1200 FT", DistanceParser.DistanceUnit.FT)).isEqualTo(0.36576, offset(MM));
     }
 
 }
